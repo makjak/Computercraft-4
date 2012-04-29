@@ -1,14 +1,57 @@
 local args = { ... }
 
-local turnedLeft = True
+turnedLeft = nil
+if args[1] == "rightturn" or args[1] == "leftturn" then
+  local turnedLeft = args[1] == "rightturn"
+else
+  print("usage: \"makefloor [leftturn|rightturn] whatever the first turn may be")
+  return
+end
 
 local curContainer = 1
 
 local function selectMatStack()
-  while 
-  
+  itemCount = turtle.getItemCount(curContainer)
+  while itemCount == 0 do
+    if curContainer == 10 then
+      return false
+    end
+    curContainer = curContainer + 1
+    turtle.select(curContainer)
+  end
+  return true
+end
+
+local function checkIfNextTurn()
+  if turnedLeft then turnAction = turtle.TurnRight else turnAction = turtle.TurnLeft end
+  turnAction()
+  retval = not turtle.detect()
+  if not turnedLeft then turnAction = turtle.TurnRight else turnAction = turtle.TurnLeft end
+  turnAction()
+  return retval
+end
 
 local function fillblock()
   shouldTurn = turtle.detect()
+  if shouldTurn then
+    couldTurn = checkIfNextTurn()
+  end
+
   turtle.up()
-  selectMatStack()
+  if not selectMatStack() then
+    return false
+  end
+  turtle.placeDown()
+  if shouldTurn then
+    if turnedLeft then turnAction = turtle.TurnRight else turnAction = turtle.TurnLeft end
+    turnAction()
+    turtle.forward()
+    turnAction()
+    turnedLeft = not turnedLeft
+  else
+    turtle.forward()
+    turtle.down()
+  end
+end
+
+while fillblock() do end
