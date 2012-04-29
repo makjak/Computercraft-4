@@ -1,6 +1,5 @@
 
 local args = { ... }
-
 --[[
 local function placeholder() return true end
 local turtle = {}
@@ -18,13 +17,15 @@ turtle.placeDown = placeholder
 turtle.select = placeholder
 ]]
 
-turnedLeft = nil
+local turnedLeft = nil
 if args[1] == "rightturn" or args[1] == "leftturn" then
-  local turnedLeft = (args[1] == "rightturn")
+  turnedLeft = (args[1] == "rightturn")
 else
   print("usage: \"makefloor [leftturn|rightturn]\" whatever the first turn may be")
   return
 end
+
+print(turnedLeft)
 
 local curContainer = 1
 turtle.select(curContainer)
