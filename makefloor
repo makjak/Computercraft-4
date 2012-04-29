@@ -1,4 +1,21 @@
+
 local args = { ... }
+
+--[[
+local function placeholder() return true end
+local turtle = {}
+turtle.up = placeholder
+turtle.down = placeholder
+turtle.digUp = placeholder
+turtle.digDown = placeholder
+turtle.dig = placeholder
+turtle.forward = placeholder
+turtle.turnLeft = placeholder
+turtle.turnRight = placeholder
+turtle.detect = placeholder
+turtle.getItemCount = placeholder
+turtle.placeDown = placeholder
+]]
 
 turnedLeft = nil
 if args[1] == "rightturn" or args[1] == "leftturn" then
@@ -18,15 +35,16 @@ local function selectMatStack()
     end
     curContainer = curContainer + 1
     turtle.select(curContainer)
+    itemCount = turtle.getItemCount(curContainer)
   end
   return true
 end
 
 local function checkIfNextTurn()
-  if turnedLeft then turnAction = turtle.TurnRight else turnAction = turtle.TurnLeft end
+  if turnedLeft then turnAction = turtle.turnRight else turnAction = turtle.turnLeft end
   turnAction()
   retval = not turtle.detect()
-  if not turnedLeft then turnAction = turtle.TurnRight else turnAction = turtle.TurnLeft end
+  if not turnedLeft then turnAction = turtle.turnRight else turnAction = turtle.turnLeft end
   turnAction()
   return retval
 end
@@ -43,7 +61,7 @@ local function fillblock()
   end
   turtle.placeDown()
   if shouldTurn then
-    if turnedLeft then turnAction = turtle.TurnRight else turnAction = turtle.TurnLeft end
+    if turnedLeft then turnAction = turtle.turnRight else turnAction = turtle.turnLeft end
     turnAction()
     turtle.forward()
     turnAction()
