@@ -3,13 +3,16 @@
 ninja_turtle = {
   current_position = {0, 0, 0},
   rotation = 0,
--- __tostring = function (x) for i,v in pairs(x) do print(i, v) end
+  __tostring = function (x) for i,v in pairs(x) do print(i, v) end
 }
-
 
 function ninja_turtle:new()
   o = o or {}
   setmetatable(o, self)
   self.___index = self
   return o
+end
+
+-- acquire a path through the path API
+function ninja_turtle:walk(path)
 end
