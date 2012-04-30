@@ -1,9 +1,46 @@
 -- A ninja turtle. It likes pizza and lays floors.
 
+--[[
+local turtle = {}
+local function placeholder() return true end
+turtle.up = function () print "turtle.up"; return true; end
+turtle.down = function () print "turtle.down"; return true; end
+turtle.digUp = function () print "turtle.digUp"; return true; end
+turtle.digDown = function () print "turtle.digDown"; return true; end
+turtle.dig = function () print "turtle.dig"; return true; end
+turtle.forward = function () print "turtle.forward"; return true; end
+turtle.turnLeft = function () print "turtle.turnLeft"; return true; end
+turtle.turnRight = function () print "turtle.turnRight"; return true; end
+turtle.detect = function() print "turtle.detect"; return true; end
+]]
+
+local function tostring (x)
+  s = ""
+  for i,v in pairs(t) do s = s.."{"..type(v).." "..i.." = "..v.."}" end
+  return s
+end
+
+path = {
+  __tostring = tostring,
+  points = {}
+}
+
+function path:new()
+  o = o or {}
+  setmetatable(o, self)
+  self.__index = self
+  return o
+end
+
+-- Adds a point to a path
+function path:add(x, y)
+  table.insert(path.points, {x, y})
+end
+
 ninja_turtle = {
   current_position = {0, 0, 0},
   rotation = 0,
-  __tostring = function (x) for i,v in pairs(x) do print(i, v) end
+  __tostring = tostring
 }
 
 function ninja_turtle:new()
@@ -14,5 +51,10 @@ function ninja_turtle:new()
 end
 
 -- acquire a path through the path API
-function ninja_turtle:walk(path)
+function ninja_turtle:walk(p)
+
 end
+
+p = path:new()
+p.add(10, 5)
+print(p)
