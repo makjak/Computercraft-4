@@ -1,21 +1,10 @@
 
 local args = { ... }
---[[
-local function placeholder() return true end
-local turtle = {}
-turtle.up = placeholder
-turtle.down = placeholder
-turtle.digUp = placeholder
-turtle.digDown = placeholder
-turtle.dig = placeholder
-turtle.forward = placeholder
-turtle.turnLeft = placeholder
-turtle.turnRight = placeholder
-turtle.detect = placeholder
-turtle.getItemCount = placeholder
-turtle.placeDown = placeholder
-turtle.select = placeholder
-]]
+
+package.path = package.path .. ";" .. "lib/?"
+
+-- local turtle = require "turtlePlaceholder"
+local utils = require "utils"
 
 local turnedLeft = nil
 if args[1] == "rightturn" or args[1] == "leftturn" then
@@ -25,7 +14,12 @@ else
   return
 end
 
-print(turnedLeft)
+local pre = "A room with walls atleast 2 high and robot should start in a corner"
+local post = "a room with a floor of $material"
+
+if not utils.confirmExecution(pre, post) then
+  return
+end
 
 local curContainer = 1
 turtle.select(curContainer)
@@ -58,7 +52,6 @@ local function fillblock()
     couldTurn = checkIfNextTurn()
   end
 
-  turtle.up()
   if not selectMatStack() then
     return false
   end
@@ -72,8 +65,13 @@ local function fillblock()
   else
     turtle.forward()
   end
-  turtle.down()
   return true
 end
+
+while not detectDown() do
+  turtle.down()
+end
+
+turtle.up()
 
 while fillblock() do end

@@ -1,0 +1,17 @@
+local function confirmExe(pre, post)
+  print("Pre:", pre)
+  print("Post:", post)
+  print("Do you want to continue Y/N [Y]: ")
+  local confirmation = io.stdin:read(1)
+  if (confirmation == 'n' or confirmation == 'N') then
+    print("Aborted")
+    return false
+  end
+  io.stdin:read("*a") -- clear stdin
+end
+
+local utils = {}
+
+utils.confirmExecution = confirmExe
+
+return utils

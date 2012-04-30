@@ -1,0 +1,18 @@
+local function placeholder() return true end
+
+local turtle = {}
+
+turtle.up = placeholder
+turtle.down = placeholder
+turtle.digUp = placeholder
+turtle.digDown = placeholder
+turtle.dig = placeholder
+turtle.forward = placeholder
+turtle.turnLeft = placeholder
+turtle.turnRight = placeholder
+turtle.detect = placeholder
+turtle.getItemCount = placeholder
+turtle.placeDown = placeholder
+turtle.select = placeholder
+
+return turtle
