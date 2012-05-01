@@ -1,6 +1,5 @@
--- will make a pythagorian tree-like thing with a given depth (depth 0 are leaves)
+-- will make a pythagoras tree-like thing with a given depth (depth 0 are leaves)
 -- this is a costy operation and takes lots of blocks (you can refill during the build)
--- depth 1 => 8 blocks, depth 2 => 64 blocks, depth 3 => ~384 blocks, depth n => 2^(2n + 1)*n (some blocks may overlap)
 -- we will always face to the tree and not move forward
 -- orientation will define left/right/up/down
 
@@ -30,13 +29,16 @@ local function bright()
 end
 
 local function select_non_empty( )
-	local i = 1
-	while turtle.getItemCount(i) == 0 do i = i+1 end
-	if not turtle.select(i) then
-		print("ERROR: I'm empty, press any key to continue, waiting for filling plz")
-		while turtle.getItemCount(9) == 0 do end
-		select_non_empty()
+	for i = 1, 9 do
+		if turtle.getItemCount(i) > 0 then
+			turtle.select(i)
+			return
+		end
 	end
+
+	turtle.select(1)
+	print("ERROR: I'm empty, plz refill me!")
+	while turtle.getItemCount(1) == 0 do sleep(2) end
 end
 
 local function place()
