@@ -1,0 +1,164 @@
+-- will make a pythagorian tree-like thing with a given depth (depth 0 are leaves)
+-- this is a costy operation and takes lots of blocks (you can refill during the build)
+-- depth 1 => 8 blocks, depth 2 => 64 blocks, depth 3 => ~384 blocks, depth n => 2^(2n + 1)*n (some blocks may overlap)
+-- we will always face to the tree and not move forward
+-- orientation will define left/right/up/down
+
+-- basic movement (orientation-less)
+local function bup()
+	while not turtle.up() do turtle.digUp() end
+end
+
+local function bdown()
+	while not turtle.down() do turtle.digDown() end
+end
+
+local function bforward()
+	while not turtle.forward() do turtle.dig() end
+end
+
+local function bleft()
+	turtle.turnLeft()
+	bforward()
+	turtle.turnRight()
+end
+
+local function bright()
+	turtle.turnRight()
+	bforward()
+	turtle.turnLeft()
+end
+
+local function select_non_empty( )
+	local i = 1
+	while turtle.getItemCount(i) == 0 do i = i+1 end
+	if not turtle.select(i) then
+		print("ERROR: I'm empty, press any key to continue, waiting for filling plz")
+		while turtle.getItemCount(9) == 0 do end
+		select_non_empty()
+	end
+end
+
+local function place()
+	select_non_empty()
+	turtle.place()
+end
+
+-- basic orientation operations
+local function toleft( orientation )
+	return (orientation + 3) % 4
+end
+
+local function toback( orientation )
+	return (orientation + 2) % 4
+end
+
+local function toright( orientation )
+	return (orientation + 1) % 4
+end
+
+-- basic movement (with orientation)
+local function forward( orientation )
+	if orientation == 0 then bup()
+	elseif orientation == 1 then bright()
+	elseif orientation == 2 then bdown()
+	elseif orientation == 3 then bleft()
+	else print("Error, wrong orientation")
+	end
+end
+
+-- TODO: make more efficient, we are not placing blocks...
+local function walk( orientation, n )
+	for i = 1, n do
+		forward(orientation)
+	end
+end
+
+-- stops after the line
+local function line( orientation, n )
+	for i = 1, n do
+		place()
+		forward(orientation)
+	end
+end
+
+-- stops after the rect
+local function fill( w, h, orientation )
+	print(" fill "..w.."x"..h.." in orientation "..orientation)
+	if w == 1 then
+		line(orientation, h)
+		return
+	end
+	for i = 1, h do
+		if i % 2 == 1 then line(toright(orientation), w - 1)
+		else line(toleft(orientation), w - 1) end
+		place()
+		forward(orientation)
+	end
+end
+
+local function tree( depth, orientation )
+	print("Start with "..depth.." in orientation "..orientation)
+	-- done with recursion
+	if depth == 0 then
+		place()
+		walk(toback(orientation), 1)
+		return
+	end
+
+	local n = 2^depth
+	local half = n/2
+	local w = n
+	local h = n + half
+
+	-- big chunk, if needed move to left
+	fill(w, h, orientation)
+	if h % 2 == 1 then
+		walk(toleft(orientation), w - 1)
+	end
+
+	walk(toleft(orientation), 1)
+	line(toleft(orientation), half)
+
+	-- first branch (left)
+	tree(depth - 1, toleft(orientation))
+	line(orientation, half)
+
+	-- second branch (left)
+	tree(depth - 1, orientation)
+
+	-- fill between branches
+	if half - 1 > 0 then
+		forward(toright(orientation))
+		fill(half - 1, half - 1, toright(orientation))
+	else
+		walk(toright(orientation), 1)
+	end
+
+	-- walk to right branches
+	walk(toright(orientation), w)
+
+	-- fill between branches
+	if half - 2 > 0 then
+		fill(half - 1, half - 2, orientation)
+	end
+	walk(orientation, 1)
+
+	-- first branch
+	tree(depth - 1, orientation)
+	line(toright(orientation), half)
+
+	-- second branch
+	tree(depth - 1, toright(orientation))
+	line(toback(orientation), half - 1)
+	line(toleft(orientation), half)
+
+	-- move back to pre-begin
+	walk(toback(orientation), h)
+	walk(toleft(orientation), w - 1)
+	walk(toback(orientation), 1)
+end
+
+local args = { ... }
+tree(args[1], 0)
+
