@@ -1,6 +1,6 @@
 -- will make a pythagorian tree-like thing with a given depth (depth 0 are leaves)
 -- this is a costy operation and takes lots of blocks (you can refill during the build)
--- depth 1 => 8 blocks, depth 2 => 64 blocks, depth 3 => ~384 blocks, depth n => 2^(2n + 1)*n (some blocks may overlap)
+-- depth 1 => 8 blocks, depth 2 => 32 blocks, depth 3 => ~128 blocks, depth n => 2^(2n + 1) (some blocks may overlap)
 -- we will always face to the tree and not move forward
 -- orientation will define left/right/up/down
 
