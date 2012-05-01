@@ -69,10 +69,12 @@ local function forward( orientation )
 	end
 end
 
--- TODO: make more efficient, we are not placing blocks...
 local function walk( orientation, n )
-	for i = 1, n do
-		forward(orientation)
+	if orientation == 0 then		for i = 1, n do bup() end
+	elseif orientation == 1 then	turtle.turnRight() for i = 1, n do bforward() end turtle.turnLeft()
+	elseif orientation == 2 then	for i = 1, n do bdown(2) end
+	elseif orientation == 3 then	turtle.turnLeft() for i = 1, n do bforward() end turtle.turnRight()
+	else print("Error, wrong orientation")
 	end
 end
 
