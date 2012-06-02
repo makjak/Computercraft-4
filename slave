@@ -1,0 +1,21 @@
+local args = { ... }
+
+rednet.open("right")
+while true do
+	-- we are using wireless to get the distance
+	-- so the master should be aligned with the slaves
+	local id, mess, dist = rednet.receive()
+	if mess == id then
+		turtle.up()
+		for i = 1, dist do turtle.back() end
+		
+		-- TODO: wait for empty chest or something
+		sleep(1)
+
+		for i = 1, dist do turtle.forward() end
+		turtle.down()
+	end
+end
+
+-- TODO: activate redstone for the buildcraft engine
+

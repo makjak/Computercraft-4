@@ -1,0 +1,6 @@
+local args = { ... }
+
+-- the wifi side, i guess...
+rednet.open("right");
+rednet.broadcast(args[1])
+
