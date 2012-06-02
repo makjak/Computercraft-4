@@ -1,10 +1,8 @@
 
 local args = { ... }
 
-package.path = package.path .. ";" .. "lib/?"
-
 -- local turtle = require "turtlePlaceholder"
-local utils = require "utils"
+local utils = dofile("lib\\utils")
 
 local turnedLeft = nil
 if args[1] == "rightturn" or args[1] == "leftturn" then
