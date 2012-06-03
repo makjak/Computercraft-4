@@ -1,3 +1,11 @@
+-- Active slaves which will activate an engine next to it (to get content of a chest)
+-- Slaves should be aligned with the master
+-- It leaks at the moment (because engines have a cool down and pipes are slow)
+
+-- Possible other (simpler) slave: use the turtle as a chest and put it next to a diamond pipe
+-- (this requires more diamond, but less redstone engines/chests and probably wont leak)
+
+
 local args = { ... }
 local threshold = 5
 

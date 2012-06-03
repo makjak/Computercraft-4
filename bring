@@ -1,3 +1,15 @@
+-- Master of the automatic bringing system
+-- Works with a simple protocol:
+
+-- Master: broadcast -item-
+-- matching slave: send -ack- or -empty-
+-- in case of a -ack- the master will wait for -return-
+-- in case of -empty- the master will exit
+
+-- if there is no matching slave, then the master won't receive ack and exits
+-- if there are more matching slaves, then there is UB
+
+
 local args = { ... }
 
 -- the wifi side, i guess...
