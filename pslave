@@ -1,0 +1,41 @@
+-- Passive slaves which will get the right items from an external source (eg: diamond pipe)
+-- Slaves should be aligned with the master
+
+
+local args = { ... }
+local item = args[1]
+local threshold = 5
+
+local function count_total()
+	local c = 0
+	for i = 1, 9 do c = c + turtle.getItemCount(i) end
+	return c
+end
+
+rednet.open("right")
+while true do
+	-- we are using wireless to get the distance
+	-- so the master should be aligned with the slaves
+	local id, mess, dist = rednet.receive()
+	if mess == args[1] then
+		if count_total() < threshold then
+			rednet.send(id, "empty")
+		else
+			rednet.send(id, "ack")
+
+			-- GO!!!
+			turtle.down()
+			for i = 1, dist do turtle.forward() end
+
+			print("I will leave again in 5 seconds...")
+			sleep(5)
+			print("Bye!")
+
+			for i = 1, dist do turtle.back() end
+			turtle.up()
+			rednet.send(id, "return")
+			print("Back home :)")
+		end
+	end
+end
+
