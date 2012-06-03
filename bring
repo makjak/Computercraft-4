@@ -19,7 +19,7 @@ if message == "ack" then
 
 	print("He returned safely :)")
 elseif message == "empty" then
-	printf("There is no " .. args[1])
+	print("There is no " .. args[1])
 else
 	print("No slave responded for " .. args[1])
 end
