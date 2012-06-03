@@ -5,15 +5,18 @@ while true do
 	-- we are using wireless to get the distance
 	-- so the master should be aligned with the slaves
 	local id, mess, dist = rednet.receive()
-	if mess == id then
+	if mess == args[1] then
+		rednet.send(id, "ack")
 		turtle.up()
 		for i = 1, dist do turtle.back() end
-		
-		-- TODO: wait for empty chest or something
-		sleep(1)
+
+		print("I will leave again in 5 seconds...")
+		sleep(5)
+		print("Bye!")
 
 		for i = 1, dist do turtle.forward() end
 		turtle.down()
+		rednet.send(id, "return")
 	end
 end
 

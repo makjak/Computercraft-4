@@ -2,5 +2,24 @@ local args = { ... }
 
 -- the wifi side, i guess...
 rednet.open("right");
+
+-- aks for the item
 rednet.broadcast(args[1])
 
+-- get ack
+local id, message = rednet.receive(3)
+if message == "ack" then
+	print("He is coming, please wait")
+	local id2 = nil
+
+	-- ignore other messages from others sources...
+	while (id ~= id2) or (message ~= "return")  do
+		id2, message = rednet.receive()
+	end
+
+	print("He returned safely :)")
+elseif message == "empty" then
+	printf("There is no " .. args[1])
+else
+	print("No slave responded for " .. args[1])
+end
